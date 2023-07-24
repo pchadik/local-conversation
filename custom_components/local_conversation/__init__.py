@@ -14,6 +14,18 @@ DOMAIN = "local_conversation"
 HOST = '192.168.86.79:5000'
 URI = f'http://{HOST}/api/v1/generate'
 
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+
+    conversation.async_set_agent(hass, entry, MyConversationAgent(hass, entry))
+    return True
+
+
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Unload."""
+    conversation.async_unset_agent(hass, entry)
+    return True
+
+
 class MyConversationAgent(agent.AbstractConversationAgent):
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
         """Initialize the agent."""
@@ -127,8 +139,3 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             },
             parse_result=False,
         )
-
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up the Local LLM Conversation component."""
-    conversation.async_set_agent(hass, entry, MyConversationAgent(hass, entry))
-    return True
