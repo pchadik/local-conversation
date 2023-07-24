@@ -1,5 +1,8 @@
 from __future__ import annotations
-import abc
+
+from functools import partial
+import logging
+from typing import Literal
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_API_KEY, MATCH_ALL
@@ -13,6 +16,8 @@ from homeassistant.util import ulid
 DOMAIN = "local_conversation"
 HOST = '192.168.86.79:5000'
 URI = f'http://{HOST}/api/v1/generate'
+
+_LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
@@ -41,7 +46,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             "url": "https://example.com",
         }
 
-    @abc.abstractmethod
+    @abstractmethod
     async def async_process(self, user_input: agent.ConversationInput) -> agent.ConversationResult:
         """Process a sentence."""
         #response = intent.IntentResponse(language=user_input.language)
