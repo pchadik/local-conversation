@@ -1,5 +1,5 @@
 from __future__ import annotations
-import functools
+import abc
 
 from homeassistant import core
 from homeassistant.helpers import intent
