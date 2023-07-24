@@ -71,20 +71,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             "name": "My Conversation Agent",
             "url": "https://example.com",
         }
-        
-    async def post_data(self, URI, request):
-        async with self.session.post(URI, json=request) as response:
-            return await response  # or response.json() if you expect JSON data
-                
-    def send_text(URI, request):
-        try:
-            req = requests.post(URI, json=request)
-            return req
-        except Exception as e:
-            _LOGGER.error("Unable to fetch data: " + str(e))
-            return {'results':[{'text':''}]}
 
-    #@abstractmethod
     async def async_process(self, user_input: agent.ConversationInput) -> agent.ConversationResult:
         """Process a sentence."""
         raw_prompt = self.entry.options.get(CONF_PROMPT, DEFAULT_PROMPT)
@@ -92,41 +79,29 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         max_tokens = self.entry.options.get(CONF_MAX_TOKENS, DEFAULT_MAX_TOKENS)
         top_p = self.entry.options.get(CONF_TOP_P, DEFAULT_TOP_P)
         temperature = self.entry.options.get(CONF_TEMPERATURE, DEFAULT_TEMPERATURE)
-        #response = intent.IntentResponse(language=user_input.language)
-        #response.async_set_speech("Test response")
+
         if user_input.conversation_id in self.history:
             conversation_id = user_input.conversation_id
             messages = self.history[conversation_id]
         else:
             conversation_id = ulid.ulid()
-            #try:
-            #    prompt = self._async_generate_prompt(raw_prompt)
-            #except TemplateError as err:
-            #    _LOGGER.error("Error rendering prompt: %s", err)
-            #    intent_response = intent.IntentResponse(language=user_input.language)
-            #    intent_response.async_set_error(
-            #        intent.IntentResponseErrorCode.UNKNOWN,
-            #        f"Sorry, I had a problem with my template: {err}",
-            #    )
-            #    return conversation.ConversationResult(
-            #        response=intent_response, conversation_id=conversation_id
-            #    )
-            #messages = [{"role": "system", "content": prompt}]
+            messages = [{"role": "system", "content": raw_prompt}]
 
-        #messages.append({"role": "user", "content": user_input.text})
+        messages.append({"role": "user", "content": user_input.text})
 
-        #_LOGGER.debug("Prompt for %s: %s", model, messages)
-
+        print(messages)
+        print(' '.join(messages))
+        
         request = {
             'prompt': user_input.text,
-            'max_new_tokens': 250,
+            'max_new_tokens': max_tokens,
     
             # Generation params. If 'preset' is set to different than 'None', the values
             # in presets/preset-name.yaml are used instead of the individual numbers.
             'preset': 'None',
             'do_sample': True,
-            'temperature': 0.7,
-            'top_p': 0.1,
+            'temperature': temperature,
+            'top_p': top_p,
             'typical_p': 1,
             'epsilon_cutoff': 0,  # In units of 1e-4
             'eta_cutoff': 0,  # In units of 1e-4
@@ -161,54 +136,8 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         
         result = await self.hass.async_add_executor_job(sync_post_data, URI, request)
 
-        # kinda works 5:09
-        #self.session = aiohttp.ClientSession()
-        #result = await self.post_data(URI, request)
-        #await self.session.close()
-
-        
-        #try:
-        #    result = await self.hass.async_add_executor_job(lambda: aiohttp.ClientSession().post(URI, json=request))
-            #result = await self.hass.async_add_executor_job(send_text, URI, request)
-        #except Exception as e:
-        #    _LOGGER.error("ERROR async_update(): " + str(e))
-        #    result = {'results':[{'text':''}]}
-
-        #try:
-        #    result = await requests.post(URI, json=request)
-        #except:
-        #    intent_response = intent.IntentResponse(language=user_input.language)
-        #    intent_response.async_set_error(
-        #        intent.IntentResponseErrorCode.UNKNOWN,
-        #        f"Sorry, I had a problem talking to the LLM",
-        #    )
-#            return conversation.ConversationResult(
-#                response=intent_response, conversation_id=conversation_id
-#            )
-        
-        #print(result)
         resp = result['results'][0]['text']
 
-        #response = await aiohttp.ClientSession().post(URI, json=request)
-        #async with aiohttp.ClientSession() as session:
-        #    response = await session.post(URI, data=json.dumps(request))
-        #    if session.status == 200:
-        #        result = await response.json()['results'][0]['text']
-        #async with websockets.connect(URI, ping_interval=None) as websocket:
-        #    await websocket.send(json.dumps(request))
-
-            #yield context  # Remove this if you just want to see the reply
-
-        #    while True:
-        #        incoming_data = await websocket.recv()
-        #        incoming_data = json.loads(incoming_data)
-        #        match incoming_data['event']:
-        #            case 'text_stream':
-        #                yield incoming_data['text']
-        #            case 'stream_end':
-        #                return
-        #result = await response.json()['results'][0]['text']
-        #print(resp)
         intent_response = intent.IntentResponse(language=user_input.language)
         intent_response.async_set_speech(resp)
         return conversation.ConversationResult(
