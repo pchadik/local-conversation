@@ -1,7 +1,7 @@
 from __future__ import annotations
 import abc
 
-from homeassistant import core
+#from homeassistant import core
 from homeassistant.helpers import intent
 from homeassistant.components import conversation
 from homeassistant.components.conversation import agent
@@ -10,6 +10,11 @@ HOST = '192.168.86.79:5000'
 URI = f'http://{HOST}/api/v1/generate'
 
 class MyConversationAgent(agent.AbstractConversationAgent):
+    def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
+        """Initialize the agent."""
+        self.hass = hass
+        self.entry = entry
+        self.history: dict[str, list[dict]] = {}
 
     @property
     def attribution(self) -> agent.Attribution:
@@ -84,11 +89,12 @@ class MyConversationAgent(agent.AbstractConversationAgent):
     def async_process(self, text) -> str:
         return "Processed text"
 
-    def supported_languages(self) -> List[str]:
-        return ['en']
-        
-async def async_setup(hass: core.HomeAssistant, config: dict) -> bool:
+    @property
+    def supported_languages(self) -> list[str] | Literal["*"]:
+        """Return a list of supported languages."""
+        return MATCH_ALL
+
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Local LLM Conversation component."""
-    conversation.async_set_agent(hass, MyConversationAgent())
-    # @TODO: Add setup code.
+    conversation.async_set_agent(hass, entry, MyConversationAgent(hass, entry))
     return True
