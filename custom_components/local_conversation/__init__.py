@@ -4,6 +4,8 @@ from functools import partial
 import logging
 from typing import Literal
 
+import requests
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_API_KEY, MATCH_ALL
 from homeassistant.core import HomeAssistant
