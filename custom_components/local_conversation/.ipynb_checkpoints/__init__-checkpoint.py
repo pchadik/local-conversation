@@ -5,7 +5,17 @@ import logging
 from typing import Literal
 
 import requests
+import asyncio
+import json
+import sys
 
+import aiohttp
+
+try:
+    import websockets
+except ImportError:
+    print("Websockets package not found. Make sure it's installed.")
+    
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_API_KEY, MATCH_ALL
 from homeassistant.core import HomeAssistant
@@ -140,11 +150,11 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             'stopping_strings': []
         }
 
-        response = requests.post(URI, json=request)
-    
+        #response = requests.post(URI, json=request)
+        response = await hass.async_add_executor_job(lambda: aiohttp.ClientSession().post(URI, json=request))
         if response.status_code == 200:
             result = response.json()['results'][0]['text']
-
+    
         intent_response = intent.IntentResponse(language=user_input.language)
         intent_response.async_set_speech(result)
         return conversation.ConversationResult(
