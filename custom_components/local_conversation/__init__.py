@@ -77,7 +77,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             return req
         except Exception as e:
             _LOGGER.error("Unable to fetch data: " + str(e))
-            return {'key_0': 0, 'key_1': None, 'key_3': 0}
+            return {'results':[{'text':''}]}
 
     #@abstractmethod
     async def async_process(self, user_input: agent.ConversationInput) -> agent.ConversationResult:
@@ -149,9 +149,11 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         }
 
         try:
-            result = await hass.async_add_executor_job(send_text, URI, request)
+            result = await hass.async_add_executor_job(lambda: aiohttp.ClientSession().post(URI, json=request))
+            #result = await self.hass.async_add_executor_job(send_text, URI, request)
         except Exception as e:
             _LOGGER.error("ERROR async_update(): " + str(e))
+            result = {'results':[{'text':''}]}
 
         #try:
         #    result = await requests.post(URI, json=request)
