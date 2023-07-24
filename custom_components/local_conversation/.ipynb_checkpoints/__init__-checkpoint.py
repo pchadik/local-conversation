@@ -89,7 +89,14 @@ class MyConversationAgent(agent.AbstractConversationAgent):
 
         messages.append({"role": "user", "content": user_input.text})
 
-        prompt_with_history = "\n".join("{}: {}".format(entry["role"], entry["content"]) for entry in messages)
+        try:
+            prompt_with_history = "\n".join("{}: {}".format(entry["role"], entry["content"]) for entry in messages)
+        except:
+            print(messages)
+            messages = [{"role": "system", "content": raw_prompt}]
+            messages.append({"role": "user", "content": user_input.text})
+            
+
         
         request = {
             'prompt': prompt_with_history,
