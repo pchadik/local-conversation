@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from homeassistant import core
 from homeassistant.helpers import intent
 from homeassistant.components import conversation
