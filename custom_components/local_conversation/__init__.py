@@ -71,7 +71,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             "url": "https://example.com",
         }
 
-    def send_text():
+    def send_text(URI, request):
         try:
             req = requests.post(URI, json=request)
             return req
