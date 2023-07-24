@@ -71,6 +71,14 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             "url": "https://example.com",
         }
 
+    def send_text():
+        try:
+            req = requests.post(URI, json=request)
+            return req
+        except Exception as e:
+            _LOGGER.error("Unable to fetch data: " + str(e))
+            return {'key_0': 0, 'key_1': None, 'key_3': 0}
+
     #@abstractmethod
     async def async_process(self, user_input: agent.ConversationInput) -> agent.ConversationResult:
         """Process a sentence."""
@@ -140,21 +148,26 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             'stopping_strings': []
         }
 
-
-
         try:
-            result = await requests.post(URI, json=request)
-        except:
-            intent_response = intent.IntentResponse(language=user_input.language)
-            intent_response.async_set_error(
-                intent.IntentResponseErrorCode.UNKNOWN,
-                f"Sorry, I had a problem talking to the LLM",
-            )
+            result = await self.hass.async_add_executor_job(send_text, URI, request)
+        except Exception as e:
+            _LOGGER.error("ERROR async_update(): " + str(e))
+
+        #try:
+        #    result = await requests.post(URI, json=request)
+        #except:
+        #    intent_response = intent.IntentResponse(language=user_input.language)
+        #    intent_response.async_set_error(
+        #        intent.IntentResponseErrorCode.UNKNOWN,
+        #        f"Sorry, I had a problem talking to the LLM",
+        #    )
 #            return conversation.ConversationResult(
 #                response=intent_response, conversation_id=conversation_id
 #            )
+        
+        print(result)
+        resp = result['results'][0]['text']
 
-        resp = await result['results'][0]['text']
         #response = await aiohttp.ClientSession().post(URI, json=request)
         #async with aiohttp.ClientSession() as session:
         #    response = await session.post(URI, data=json.dumps(request))
