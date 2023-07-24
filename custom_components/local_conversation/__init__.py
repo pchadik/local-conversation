@@ -83,6 +83,12 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         except Exception as e:
             _LOGGER.error("Unable to fetch data: " + str(e))
             return {'results':[{'text':''}]}
+            
+    def sync_post_data(URI, request):
+        response = requests.post(URI, json=request)
+        # Ensure the response contains valid JSON before trying to decode
+        response.raise_for_status()
+        return response.json()
 
     #@abstractmethod
     async def async_process(self, user_input: agent.ConversationInput) -> agent.ConversationResult:
@@ -153,9 +159,12 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             'stopping_strings': []
         }
 
-        self.session = aiohttp.ClientSession()
-        result = await self.post_data(URI, request)
-        await self.session.close()
+        result = await self.hass.async_add_executor_job(sync_post_data, URI, request)
+
+        # kinda works 5:09
+        #self.session = aiohttp.ClientSession()
+        #result = await self.post_data(URI, request)
+        #await self.session.close()
 
         
         #try:
