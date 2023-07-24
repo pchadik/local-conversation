@@ -45,14 +45,14 @@ URI = f'http://{HOST}/api/v1/generate'
 _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    self.session = aiohttp.ClientSession()
+    
     conversation.async_set_agent(hass, entry, MyConversationAgent(hass, entry))
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload."""
-    await self.session.close()
+    
     conversation.async_unset_agent(hass, entry)
     return True
 
@@ -153,9 +153,9 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             'stopping_strings': []
         }
 
-        
+        self.session = aiohttp.ClientSession()
         result = await self.post_data(URI, request)
-
+        await self.session.close()
 
         
         #try:
