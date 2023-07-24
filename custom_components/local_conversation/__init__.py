@@ -86,23 +86,23 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             messages = self.history[conversation_id]
         else:
             conversation_id = ulid.ulid()
-            try:
-                prompt = self._async_generate_prompt(raw_prompt)
-            except TemplateError as err:
-                _LOGGER.error("Error rendering prompt: %s", err)
-                intent_response = intent.IntentResponse(language=user_input.language)
-                intent_response.async_set_error(
-                    intent.IntentResponseErrorCode.UNKNOWN,
-                    f"Sorry, I had a problem with my template: {err}",
-                )
-                return conversation.ConversationResult(
-                    response=intent_response, conversation_id=conversation_id
-                )
-            messages = [{"role": "system", "content": prompt}]
+            #try:
+            #    prompt = self._async_generate_prompt(raw_prompt)
+            #except TemplateError as err:
+            #    _LOGGER.error("Error rendering prompt: %s", err)
+            #    intent_response = intent.IntentResponse(language=user_input.language)
+            #    intent_response.async_set_error(
+            #        intent.IntentResponseErrorCode.UNKNOWN,
+            #        f"Sorry, I had a problem with my template: {err}",
+            #    )
+            #    return conversation.ConversationResult(
+            #        response=intent_response, conversation_id=conversation_id
+            #    )
+            #messages = [{"role": "system", "content": prompt}]
 
-        messages.append({"role": "user", "content": user_input.text})
+        #messages.append({"role": "user", "content": user_input.text})
 
-        _LOGGER.debug("Prompt for %s: %s", model, messages)
+        #_LOGGER.debug("Prompt for %s: %s", model, messages)
 
         request = {
             'prompt': user_input.text,
