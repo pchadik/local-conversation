@@ -136,8 +136,8 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         result = await self.hass.async_add_executor_job(sync_post_data, URI, request)
 
         resp = result['results'][0]['text']
-
-        messages.append(f'assistant: {resp}')
+        
+        messages.append({"role": "assistant", "content": resp})
         self.history[conversation_id] = messages
         
         intent_response = intent.IntentResponse(language=user_input.language)
