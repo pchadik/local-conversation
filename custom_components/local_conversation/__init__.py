@@ -140,30 +140,29 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             'stopping_strings': []
         }
 
-        #response = requests.post(URI, json=request)
+        response = await requests.post(URI, json=request)
         #response = await aiohttp.ClientSession().post(URI, json=request)
         #async with aiohttp.ClientSession() as session:
         #    response = await session.post(URI, data=json.dumps(request))
         #    if session.status == 200:
         #        result = await response.json()['results'][0]['text']
-        async with websockets.connect(URI, ping_interval=None) as websocket:
-            await websocket.send(json.dumps(request))
+        #async with websockets.connect(URI, ping_interval=None) as websocket:
+        #    await websocket.send(json.dumps(request))
 
             #yield context  # Remove this if you just want to see the reply
 
-            while True:
-                incoming_data = await websocket.recv()
-                incoming_data = json.loads(incoming_data)
-
-                match incoming_data['event']:
-                    case 'text_stream':
-                        yield incoming_data['text']
-                    case 'stream_end':
-                        return
-
-        print(incoming_data)
+        #    while True:
+        #        incoming_data = await websocket.recv()
+        #        incoming_data = json.loads(incoming_data)
+        #        match incoming_data['event']:
+        #            case 'text_stream':
+        #                yield incoming_data['text']
+        #            case 'stream_end':
+        #                return
+        result = await response.json()['results'][0]['text']
+        print(result)
         intent_response = intent.IntentResponse(language=user_input.language)
-        intent_response.async_set_speech(incoming_data)
+        intent_response.async_set_speech(result)
         return conversation.ConversationResult(
             response=intent_response, conversation_id=conversation_id
         )
