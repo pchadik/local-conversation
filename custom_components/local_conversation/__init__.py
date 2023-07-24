@@ -149,7 +149,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         }
 
         try:
-            result = await hass.async_add_executor_job(lambda: aiohttp.ClientSession().post(URI, json=request))
+            result = await self.hass.async_add_executor_job(lambda: aiohttp.ClientSession().post(URI, json=request))
             #result = await self.hass.async_add_executor_job(send_text, URI, request)
         except Exception as e:
             _LOGGER.error("ERROR async_update(): " + str(e))
@@ -168,7 +168,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
 #            )
         
         #print(result)
-        resp = await result['results'][0]['text']
+        resp = result['results'][0]['text']
 
         #response = await aiohttp.ClientSession().post(URI, json=request)
         #async with aiohttp.ClientSession() as session:
