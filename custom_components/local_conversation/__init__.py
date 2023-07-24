@@ -96,7 +96,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             messages = [{"role": "system", "content": raw_prompt}]
             messages.append({"role": "user", "content": user_input.text})
             
-
+        prompt_with_history += "\nassistant: 
         
         request = {
             'prompt': prompt_with_history,
