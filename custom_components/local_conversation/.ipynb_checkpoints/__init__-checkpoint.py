@@ -1,5 +1,6 @@
 from homeassistant import core
 from homeassistant.helpers import intent
+from homeassistant.components import conversation
 from homeassistant.components.conversation import agent
 
 HOST = '192.168.86.79:5000'
@@ -21,7 +22,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             "url": "https://example.com",
         }
 
-    @abstractmethod
+    #@abstractmethod
     async def async_process(self, user_input: agent.ConversationInput) -> agent.ConversationResult:
         """Process a sentence."""
         #response = intent.IntentResponse(language=user_input.language)
