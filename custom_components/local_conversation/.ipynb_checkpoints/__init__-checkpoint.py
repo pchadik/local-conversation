@@ -13,6 +13,19 @@ from homeassistant.exceptions import ConfigEntryNotReady, TemplateError
 from homeassistant.helpers import intent, template
 from homeassistant.util import ulid
 
+from .const import (
+    CONF_CHAT_MODEL,
+    CONF_MAX_TOKENS,
+    CONF_PROMPT,
+    CONF_TEMPERATURE,
+    CONF_TOP_P,
+    DEFAULT_CHAT_MODEL,
+    DEFAULT_MAX_TOKENS,
+    DEFAULT_PROMPT,
+    DEFAULT_TEMPERATURE,
+    DEFAULT_TOP_P,
+)
+
 DOMAIN = "local_conversation"
 HOST = '192.168.86.79:5000'
 URI = f'http://{HOST}/api/v1/generate'
