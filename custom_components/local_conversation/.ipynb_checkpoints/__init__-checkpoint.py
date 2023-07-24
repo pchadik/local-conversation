@@ -1,7 +1,7 @@
 from __future__ import annotations
 import abc
 
-#from homeassistant import core
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers import intent
 from homeassistant.components import conversation
 from homeassistant.components.conversation import agent
@@ -85,9 +85,17 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             conversation_id=None,
             response=result
         )
+        
+    async def async_process(
+        self, user_input: conversation.ConversationInput
+    ) -> conversation.ConversationResult:
+        """Process a sentence."""
 
-    def async_process(self, text) -> str:
-        return "Processed text"
+        intent_response = intent.IntentResponse(language=user_input.language)
+        intent_response.async_set_speech("Processed text")
+        return conversation.ConversationResult(
+            response=intent_response, conversation_id=conversation_id
+        )
 
     @property
     def supported_languages(self) -> list[str] | Literal["*"]:
