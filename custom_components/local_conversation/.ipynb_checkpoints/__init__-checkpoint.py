@@ -108,19 +108,8 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         if response.status_code == 200:
             result = response.json()['results'][0]['text']
 
-        
-        return agent.ConversationResult(
-            conversation_id=None,
-            response=result
-        )
-        
-    async def async_process(
-        self, user_input: conversation.ConversationInput
-    ) -> conversation.ConversationResult:
-        """Process a sentence."""
-
         intent_response = intent.IntentResponse(language=user_input.language)
-        intent_response.async_set_speech("Processed text")
+        intent_response.async_set_speech(result)
         return conversation.ConversationResult(
             response=intent_response, conversation_id=conversation_id
         )
