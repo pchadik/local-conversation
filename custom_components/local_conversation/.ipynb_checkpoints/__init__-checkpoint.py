@@ -154,7 +154,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
 #                response=intent_response, conversation_id=conversation_id
 #            )
 
-        resp = result['results'][0]['text']
+        resp = await result['results'][0]['text']
         #response = await aiohttp.ClientSession().post(URI, json=request)
         #async with aiohttp.ClientSession() as session:
         #    response = await session.post(URI, data=json.dumps(request))
