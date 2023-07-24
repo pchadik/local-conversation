@@ -155,7 +155,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         async with aiohttp.ClientSession() as session:
             response = await session.post(URI, data=json.dumps(request))
             if session.status == 200:
-                result = response.json()['results'][0]['text']
+                result = await response.json()['results'][0]['text']
     
         intent_response = intent.IntentResponse(language=user_input.language)
         intent_response.async_set_speech(result)
