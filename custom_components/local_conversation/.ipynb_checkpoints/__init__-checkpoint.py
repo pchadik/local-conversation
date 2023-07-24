@@ -104,16 +104,6 @@ class MyConversationAgent(agent.AbstractConversationAgent):
 
         _LOGGER.debug("Prompt for %s: %s", model, messages)
 
-        
-#@dataclass(slots=True)
-#class ConversationInput:
-#    """User input to be processed."""
-#    text: str
-#    context: Context
-#    conversation_id: str | None
-#    device_id: str | None
-#    language: str
-
         request = {
             'prompt': user_input.text,
             'max_new_tokens': 250,
@@ -152,13 +142,28 @@ class MyConversationAgent(agent.AbstractConversationAgent):
 
         #response = requests.post(URI, json=request)
         #response = await aiohttp.ClientSession().post(URI, json=request)
-        async with aiohttp.ClientSession() as session:
-            response = await session.post(URI, data=json.dumps(request))
-            if session.status == 200:
-                result = await response.json()['results'][0]['text']
-    
+        #async with aiohttp.ClientSession() as session:
+        #    response = await session.post(URI, data=json.dumps(request))
+        #    if session.status == 200:
+        #        result = await response.json()['results'][0]['text']
+        async with websockets.connect(URI, ping_interval=None) as websocket:
+            await websocket.send(json.dumps(request))
+
+            #yield context  # Remove this if you just want to see the reply
+
+            while True:
+                incoming_data = await websocket.recv()
+                incoming_data = json.loads(incoming_data)
+
+                match incoming_data['event']:
+                    case 'text_stream':
+                        yield incoming_data['text']
+                    case 'stream_end':
+                        return
+
+        print(incoming_data)
         intent_response = intent.IntentResponse(language=user_input.language)
-        intent_response.async_set_speech(result)
+        intent_response.async_set_speech(incoming_data)
         return conversation.ConversationResult(
             response=intent_response, conversation_id=conversation_id
         )
