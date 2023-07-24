@@ -148,7 +148,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             intent_response = intent.IntentResponse(language=user_input.language)
             intent_response.async_set_error(
                 intent.IntentResponseErrorCode.UNKNOWN,
-                f"Sorry, I had a problem talking to the LLM: {err}",
+                f"Sorry, I had a problem talking to the LLM",
             )
 #            return conversation.ConversationResult(
 #                response=intent_response, conversation_id=conversation_id
