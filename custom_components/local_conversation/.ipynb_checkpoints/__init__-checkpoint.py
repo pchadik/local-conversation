@@ -6,6 +6,7 @@ from homeassistant.helpers import intent
 from homeassistant.components import conversation
 from homeassistant.components.conversation import agent
 
+DOMAIN = "local_conversation"
 HOST = '192.168.86.79:5000'
 URI = f'http://{HOST}/api/v1/generate'
 
