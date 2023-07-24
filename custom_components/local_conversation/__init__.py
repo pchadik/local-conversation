@@ -4,9 +4,11 @@ import abc
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_API_KEY, MATCH_ALL
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import intent
 from homeassistant.components import conversation
 from homeassistant.components.conversation import agent
+from homeassistant.exceptions import ConfigEntryNotReady, TemplateError
+from homeassistant.helpers import intent, template
+from homeassistant.util import ulid
 
 DOMAIN = "local_conversation"
 HOST = '192.168.86.79:5000'
@@ -32,7 +34,30 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         """Process a sentence."""
         #response = intent.IntentResponse(language=user_input.language)
         #response.async_set_speech("Test response")
+        if user_input.conversation_id in self.history:
+            conversation_id = user_input.conversation_id
+            messages = self.history[conversation_id]
+        else:
+            conversation_id = ulid.ulid()
+            try:
+                prompt = self._async_generate_prompt(raw_prompt)
+            except TemplateError as err:
+                _LOGGER.error("Error rendering prompt: %s", err)
+                intent_response = intent.IntentResponse(language=user_input.language)
+                intent_response.async_set_error(
+                    intent.IntentResponseErrorCode.UNKNOWN,
+                    f"Sorry, I had a problem with my template: {err}",
+                )
+                return conversation.ConversationResult(
+                    response=intent_response, conversation_id=conversation_id
+                )
+            messages = [{"role": "system", "content": prompt}]
 
+        messages.append({"role": "user", "content": user_input.text})
+
+        _LOGGER.debug("Prompt for %s: %s", model, messages)
+
+        
 #@dataclass(slots=True)
 #class ConversationInput:
 #    """User input to be processed."""
@@ -104,6 +129,15 @@ class MyConversationAgent(agent.AbstractConversationAgent):
     def supported_languages(self) -> list[str] | Literal["*"]:
         """Return a list of supported languages."""
         return MATCH_ALL
+
+    def _async_generate_prompt(self, raw_prompt: str) -> str:
+        """Generate a prompt for the user."""
+        return template.Template(raw_prompt, self.hass).async_render(
+            {
+                "ha_name": self.hass.config.location_name,
+            },
+            parse_result=False,
+        )
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the Local LLM Conversation component."""
