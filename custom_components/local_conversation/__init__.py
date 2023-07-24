@@ -151,7 +151,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         }
 
         #response = requests.post(URI, json=request)
-        response = await hass.async_add_executor_job(lambda: aiohttp.ClientSession().post(URI, json=request))
+        response = await aiohttp.ClientSession().post(URI, json=request)
         if response.status_code == 200:
             result = response.json()['results'][0]['text']
     
