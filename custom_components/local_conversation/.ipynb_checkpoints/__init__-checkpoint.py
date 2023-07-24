@@ -1,6 +1,8 @@
 from __future__ import annotations
 import abc
 
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import CONF_API_KEY, MATCH_ALL
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import intent
 from homeassistant.components import conversation
