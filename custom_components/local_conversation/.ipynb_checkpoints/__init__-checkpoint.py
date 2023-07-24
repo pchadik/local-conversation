@@ -137,6 +137,9 @@ class MyConversationAgent(agent.AbstractConversationAgent):
 
         resp = result['results'][0]['text']
 
+        messages.append(f'assistant: {resp}')
+        self.history[conversation_id] = messages
+        
         intent_response = intent.IntentResponse(language=user_input.language)
         intent_response.async_set_speech(resp)
         return conversation.ConversationResult(
