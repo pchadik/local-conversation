@@ -1,0 +1,84 @@
+from homeassistant import core
+from homeassistant.helpers import intent
+from homeassistant.components.conversation import agent
+
+HOST = '192.168.86.79:5000'
+URI = f'http://{HOST}/api/v1/generate'
+
+async def async_setup(hass: core.HomeAssistant, config: dict) -> bool:
+    """Set up the Local LLM Conversation component."""
+    conversation.async_set_agent(hass, MyConversationAgent())
+    # @TODO: Add setup code.
+    return True
+
+class MyConversationAgent(agent.AbstractConversationAgent):
+
+    @property
+    def attribution(self) -> agent.Attribution:
+        """Return the attribution."""
+        return {
+            "name": "My Conversation Agent",
+            "url": "https://example.com",
+        }
+
+    @abstractmethod
+    async def async_process(self, user_input: agent.ConversationInput) -> agent.ConversationResult:
+        """Process a sentence."""
+        #response = intent.IntentResponse(language=user_input.language)
+        #response.async_set_speech("Test response")
+
+#@dataclass(slots=True)
+#class ConversationInput:
+#    """User input to be processed."""
+#    text: str
+#    context: Context
+#    conversation_id: str | None
+#    device_id: str | None
+#    language: str
+
+        request = {
+            'prompt': user_input.text,
+            'max_new_tokens': 250,
+    
+            # Generation params. If 'preset' is set to different than 'None', the values
+            # in presets/preset-name.yaml are used instead of the individual numbers.
+            'preset': 'None',
+            'do_sample': True,
+            'temperature': 0.7,
+            'top_p': 0.1,
+            'typical_p': 1,
+            'epsilon_cutoff': 0,  # In units of 1e-4
+            'eta_cutoff': 0,  # In units of 1e-4
+            'tfs': 1,
+            'top_a': 0,
+            'repetition_penalty': 1.18,
+            'repetition_penalty_range': 0,
+            'top_k': 40,
+            'min_length': 0,
+            'no_repeat_ngram_size': 0,
+            'num_beams': 1,
+            'penalty_alpha': 0,
+            'length_penalty': 1,
+            'early_stopping': False,
+            'mirostat_mode': 0,
+            'mirostat_tau': 5,
+            'mirostat_eta': 0.1,
+    
+            'seed': -1,
+            'add_bos_token': True,
+            'truncation_length': 2048,
+            'ban_eos_token': False,
+            'skip_special_tokens': True,
+            'stopping_strings': []
+        }
+
+        response = requests.post(URI, json=request)
+    
+        if response.status_code == 200:
+            result = response.json()['results'][0]['text']
+
+        
+        return agent.ConversationResult(
+            conversation_id=None,
+            response=result
+        )
