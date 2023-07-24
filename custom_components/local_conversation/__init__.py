@@ -25,7 +25,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             "url": "https://example.com",
         }
 
-    @abstractmethod
+    @abc.abstractmethod
     async def async_process(self, user_input: agent.ConversationInput) -> agent.ConversationResult:
         """Process a sentence."""
         #response = intent.IntentResponse(language=user_input.language)
