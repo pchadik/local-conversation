@@ -82,7 +82,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         )
 
     async def async_setup(hass: core.HomeAssistant, config: dict) -> bool:
-    """Set up the Local LLM Conversation component."""
-    conversation.async_set_agent(hass, config, MyConversationAgent())
-    # @TODO: Add setup code.
-    return True
+        """Set up the Local LLM Conversation component."""
+        conversation.async_set_agent(hass, config, MyConversationAgent())
+        # @TODO: Add setup code.
+        return True
