@@ -8,7 +8,7 @@ URI = f'http://{HOST}/api/v1/generate'
 
 async def async_setup(hass: core.HomeAssistant, config: dict) -> bool:
     """Set up the Local LLM Conversation component."""
-    conversation.async_set_agent(hass, MyConversationAgent())
+    conversation.async_set_agent(hass, config, MyConversationAgent())
     # @TODO: Add setup code.
     return True
 
