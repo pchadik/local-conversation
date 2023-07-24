@@ -81,8 +81,14 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             response=result
         )
 
-    async def async_setup(hass: core.HomeAssistant, config: dict) -> bool:
-        """Set up the Local LLM Conversation component."""
-        conversation.async_set_agent(hass, config, MyConversationAgent())
-        # @TODO: Add setup code.
-        return True
+    def async_process(self, text) -> str:
+        return "Processed text"
+
+    def supported_languages(self) -> List[str]:
+        return ['en']
+        
+async def async_setup(hass: core.HomeAssistant, config: dict) -> bool:
+    """Set up the Local LLM Conversation component."""
+    conversation.async_set_agent(hass, config, MyConversationAgent())
+    # @TODO: Add setup code.
+    return True
