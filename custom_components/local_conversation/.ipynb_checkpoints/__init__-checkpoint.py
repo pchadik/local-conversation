@@ -153,7 +153,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         #response = requests.post(URI, json=request)
         #response = await aiohttp.ClientSession().post(URI, json=request)
         async with aiohttp.ClientSession() as session:
-            response = await session.post(uri, data=jsonable_dict(request))
+            response = await session.post(URI, data=jsonable_dict(request))
             if response.status == 200:
                 result = response.json()['results'][0]['text']
     
