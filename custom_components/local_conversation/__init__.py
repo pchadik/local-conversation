@@ -140,7 +140,21 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             'stopping_strings': []
         }
 
-        response = await requests.post(URI, json=request)
+
+
+        try:
+            result = await requests.post(URI, json=request)
+        except:
+            intent_response = intent.IntentResponse(language=user_input.language)
+            intent_response.async_set_error(
+                intent.IntentResponseErrorCode.UNKNOWN,
+                f"Sorry, I had a problem talking to the LLM: {err}",
+            )
+#            return conversation.ConversationResult(
+#                response=intent_response, conversation_id=conversation_id
+#            )
+
+        resp = result['results'][0]['text']
         #response = await aiohttp.ClientSession().post(URI, json=request)
         #async with aiohttp.ClientSession() as session:
         #    response = await session.post(URI, data=json.dumps(request))
@@ -159,10 +173,10 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         #                yield incoming_data['text']
         #            case 'stream_end':
         #                return
-        result = await response.json()['results'][0]['text']
-        print(result)
+        #result = await response.json()['results'][0]['text']
+        print(resp)
         intent_response = intent.IntentResponse(language=user_input.language)
-        intent_response.async_set_speech(result)
+        intent_response.async_set_speech(resp)
         return conversation.ConversationResult(
             response=intent_response, conversation_id=conversation_id
         )
