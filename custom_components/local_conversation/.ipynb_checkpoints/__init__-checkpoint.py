@@ -89,11 +89,10 @@ class MyConversationAgent(agent.AbstractConversationAgent):
 
         messages.append({"role": "user", "content": user_input.text})
 
-        print(messages)
-        print(' '.join(messages))
+        prompt_with_history = "\n".join("{}: {}".format(entry["role"], entry["content"]) for entry in messages)
         
         request = {
-            'prompt': user_input.text,
+            'prompt': prompt_with_history,
             'max_new_tokens': max_tokens,
     
             # Generation params. If 'preset' is set to different than 'None', the values
