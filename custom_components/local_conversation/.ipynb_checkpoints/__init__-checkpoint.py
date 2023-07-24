@@ -45,13 +45,14 @@ URI = f'http://{HOST}/api/v1/generate'
 _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-
+    self.session = aiohttp.ClientSession()
     conversation.async_set_agent(hass, entry, MyConversationAgent(hass, entry))
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload."""
+    await self.session.close()
     conversation.async_unset_agent(hass, entry)
     return True
 
@@ -70,7 +71,11 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             "name": "My Conversation Agent",
             "url": "https://example.com",
         }
-
+        
+    async def post_data(self, URI, request):
+        async with self.session.post(URI, json=request) as response:
+            return await response  # or response.json() if you expect JSON data
+                
     def send_text(URI, request):
         try:
             req = requests.post(URI, json=request)
@@ -148,12 +153,17 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             'stopping_strings': []
         }
 
-        try:
-            result = await self.hass.async_add_executor_job(lambda: aiohttp.ClientSession().post(URI, json=request))
+        
+        result = await self.post_data(URI, request)
+
+
+        
+        #try:
+        #    result = await self.hass.async_add_executor_job(lambda: aiohttp.ClientSession().post(URI, json=request))
             #result = await self.hass.async_add_executor_job(send_text, URI, request)
-        except Exception as e:
-            _LOGGER.error("ERROR async_update(): " + str(e))
-            result = {'results':[{'text':''}]}
+        #except Exception as e:
+        #    _LOGGER.error("ERROR async_update(): " + str(e))
+        #    result = {'results':[{'text':''}]}
 
         #try:
         #    result = await requests.post(URI, json=request)
