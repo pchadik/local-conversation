@@ -46,9 +46,14 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             "url": "https://example.com",
         }
 
-    @abstractmethod
+    #@abstractmethod
     async def async_process(self, user_input: agent.ConversationInput) -> agent.ConversationResult:
         """Process a sentence."""
+        raw_prompt = self.entry.options.get(CONF_PROMPT, DEFAULT_PROMPT)
+        model = self.entry.options.get(CONF_CHAT_MODEL, DEFAULT_CHAT_MODEL)
+        max_tokens = self.entry.options.get(CONF_MAX_TOKENS, DEFAULT_MAX_TOKENS)
+        top_p = self.entry.options.get(CONF_TOP_P, DEFAULT_TOP_P)
+        temperature = self.entry.options.get(CONF_TEMPERATURE, DEFAULT_TEMPERATURE)
         #response = intent.IntentResponse(language=user_input.language)
         #response.async_set_speech("Test response")
         if user_input.conversation_id in self.history:
