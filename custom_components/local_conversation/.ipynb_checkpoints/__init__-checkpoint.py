@@ -9,12 +9,6 @@ from homeassistant.components.conversation import agent
 HOST = '192.168.86.79:5000'
 URI = f'http://{HOST}/api/v1/generate'
 
-async def async_setup(hass: core.HomeAssistant, config: dict) -> bool:
-    """Set up the Local LLM Conversation component."""
-    conversation.async_set_agent(hass, config, MyConversationAgent())
-    # @TODO: Add setup code.
-    return True
-
 class MyConversationAgent(agent.AbstractConversationAgent):
 
     @property
@@ -86,3 +80,9 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             conversation_id=None,
             response=result
         )
+
+    async def async_setup(hass: core.HomeAssistant, config: dict) -> bool:
+    """Set up the Local LLM Conversation component."""
+    conversation.async_set_agent(hass, config, MyConversationAgent())
+    # @TODO: Add setup code.
+    return True
