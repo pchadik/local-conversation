@@ -113,7 +113,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             'eta_cutoff': 0,  # In units of 1e-4
             'tfs': 1,
             'top_a': 0,
-            'repetition_penalty': 1.18,
+            'repetition_penalty': 1.17,
             'repetition_penalty_range': 0,
             'top_k': 40,
             'min_length': 0,
@@ -121,14 +121,14 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             'num_beams': 1,
             'penalty_alpha': 0,
             'length_penalty': 1,
-            'early_stopping': False,
+            'early_stopping': True,
             'mirostat_mode': 0,
             'mirostat_tau': 5,
             'mirostat_eta': 0.1,
     
             'seed': -1,
             'add_bos_token': True,
-            'truncation_length': 2048,
+            'truncation_length': 4096,
             'ban_eos_token': False,
             'skip_special_tokens': True,
             'stopping_strings': []
