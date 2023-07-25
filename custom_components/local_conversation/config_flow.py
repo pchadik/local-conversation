@@ -1,4 +1,4 @@
-"""Config flow for OpenAI Conversation integration."""
+"""Config flow for Local LLM Conversation integration."""
 from __future__ import annotations
 
 from functools import partial
