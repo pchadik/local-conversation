@@ -1,7 +1,6 @@
 """Constants for the Local LLM Conversation integration."""
 
 # URI
-
 DOMAIN = "local_conversation"
 CONF_PROMPT = "prompt"
 DEFAULT_PROMPT = """This smart home is controlled by Home Assistant. Use the following factual information to answer questions from the owner:
@@ -39,7 +38,7 @@ CONF_TOP_P = "top_p"
 DEFAULT_TOP_P = 0.5
 CONF_TEMPERATURE = "temperature"
 DEFAULT_TEMPERATURE = 0.7
-
-#TOP_K
-#NUM_BEAMS
-
+CONF_TOP_K = "top_k"
+DEFAULT_TOP_K = 40
+CONF_NUM_BEAMS = "num_beams"
+DEFAULT_NUM_BEAMS = 1

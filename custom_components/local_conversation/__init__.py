@@ -31,11 +31,16 @@ from .const import (
     CONF_PROMPT,
     CONF_TEMPERATURE,
     CONF_TOP_P,
+    CONF_TOP_K,
+    CONF_NUM_BEAMS,
     DEFAULT_CHAT_MODEL,
     DEFAULT_MAX_TOKENS,
     DEFAULT_PROMPT,
     DEFAULT_TEMPERATURE,
     DEFAULT_TOP_P,
+    DEFAULT_TOP_K,
+    DEFAULT_NUM_BEAMS,
+    DOMAIN,
 )
 
 DOMAIN = "local_conversation"
@@ -79,6 +84,8 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         max_tokens = self.entry.options.get(CONF_MAX_TOKENS, DEFAULT_MAX_TOKENS)
         top_p = self.entry.options.get(CONF_TOP_P, DEFAULT_TOP_P)
         temperature = self.entry.options.get(CONF_TEMPERATURE, DEFAULT_TEMPERATURE)
+        top_k = self.entry.options.get(CONF_TOP_K, DEFAULT_TOP_K)
+        num_beams = self.entry.options.get(CONF_NUM_BEAMS, DEFAULT_NUM_BEAMS)
 
         if user_input.conversation_id in self.history:
             conversation_id = user_input.conversation_id
@@ -129,10 +136,10 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             'top_a': 0,
             'repetition_penalty': 1.17,
             'repetition_penalty_range': 0,
-            'top_k': 40,
+            'top_k': top_k,
             'min_length': 0,
             'no_repeat_ngram_size': 0,
-            'num_beams': 1,
+            'num_beams': num_beams,
             'penalty_alpha': 0,
             'length_penalty': 1,
             'early_stopping': True,
