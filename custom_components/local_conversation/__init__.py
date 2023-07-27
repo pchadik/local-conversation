@@ -35,6 +35,7 @@ from .const import (
     CONF_TOP_P,
     CONF_TOP_K,
     CONF_NUM_BEAMS,
+    CONF_TRUNC_LENGTH,
     DEFAULT_CHAT_MODEL,
     DEFAULT_SERVER_IP,
     DEFAULT_SERVER_PORT,
@@ -44,6 +45,7 @@ from .const import (
     DEFAULT_TOP_P,
     DEFAULT_TOP_K,
     DEFAULT_NUM_BEAMS,
+    DEFAULT_TRUNC_LENGTH,
     DOMAIN,
 )
 
@@ -90,7 +92,8 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         temperature = self.entry.options.get(CONF_TEMPERATURE, DEFAULT_TEMPERATURE)
         top_k = self.entry.options.get(CONF_TOP_K, DEFAULT_TOP_K)
         num_beams = self.entry.options.get(CONF_NUM_BEAMS, DEFAULT_NUM_BEAMS)
-
+        trunc_length = self.entry.options.get(CONF_TRUNC_LENGTH, DEFAULT_TRUNC_LENGTH)
+        
         host_uri = f'{self.entry.options.get(CONF_SERVER_IP, DEFAULT_SERVER_IP)}:{self.entry.options.get(CONF_SERVER_PORT, DEFAULT_SERVER_PORT)}'
         URI = f'http://{host_uri}/api/v1/generate'
 
@@ -157,7 +160,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
     
             'seed': -1,
             'add_bos_token': True,
-            'truncation_length': 8192, # should reduce this by/for default installs
+            'truncation_length': trunc_length, # should reduce this by/for default installs
             'ban_eos_token': False,
             'skip_special_tokens': True,
             'stopping_strings': []

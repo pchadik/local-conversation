@@ -30,6 +30,7 @@ from .const import (
     CONF_TOP_P,
     CONF_TOP_K,
     CONF_NUM_BEAMS,
+    CONF_TRUNC_LENGTH,
     DEFAULT_CHAT_MODEL,
     DEFAULT_SERVER_IP,
     DEFAULT_SERVER_PORT,
@@ -39,6 +40,7 @@ from .const import (
     DEFAULT_TOP_P,
     DEFAULT_TOP_K,
     DEFAULT_NUM_BEAMS,
+    DEFAULT_TRUNC_LENGTH,
     DOMAIN,
 )
 
@@ -86,6 +88,11 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
             description="Number of beams in search",
             default=DEFAULT_NUM_BEAMS,
             ): NumberSelector(NumberSelectorConfig(min=1, max=5, step=1)),
+        vol.Optional(
+            CONF_TRUNC_LENGTH,
+            description="Truncation length (context)",
+            default=DEFAULT_TRUNC_LENGTH,
+            ): NumberSelector(NumberSelectorConfig(min=512, max=8192, step=32)),
     }
 )
 
@@ -100,6 +107,7 @@ DEFAULT_OPTIONS = types.MappingProxyType(
         CONF_TEMPERATURE: DEFAULT_TEMPERATURE,
         CONF_TOP_K: DEFAULT_TOP_K,
         CONF_NUM_BEAMS: DEFAULT_NUM_BEAMS,
+        CONF_TRUNC_LENGTH: DEFAULT_TRUNC_LENGTH
     }
 )
 
@@ -218,4 +226,9 @@ def llm_config_option_schema(options: MappingProxyType[str, Any]) -> dict:
             description="Number of beams in search",
             default=options.get(CONF_NUM_BEAMS, DEFAULT_NUM_BEAMS),
         ): NumberSelector(NumberSelectorConfig(min=1, max=5, step=1)),
+        vol.Optional(
+            CONF_TRUNC_LENGTH,
+            description="Truncation length (context)",
+            default=DEFAULT_TRUNC_LENGTH,
+            ): NumberSelector(NumberSelectorConfig(min=512, max=8192, step=32)),
     }
