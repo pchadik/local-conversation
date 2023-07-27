@@ -30,7 +30,6 @@ from .const import (
     CONF_TOP_P,
     CONF_TOP_K,
     CONF_NUM_BEAMS,
-    CONF_LOCAL_URI,
     DEFAULT_CHAT_MODEL,
     DEFAULT_SERVER_IP,
     DEFAULT_SERVER_PORT,
