@@ -49,7 +49,7 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
         vol.Required(CONF_SERVER_IP,
             default=DEFAULT_SERVER_IP,): str,
         vol.Required(CONF_SERVER_PORT,
-            default=DEFAULT_SERVER_PORT,): str,
+            default=DEFAULT_SERVER_PORT,): int,
         vol.Optional(
             CONF_PROMPT,
             default=DEFAULT_PROMPT,
@@ -171,7 +171,7 @@ def llm_config_option_schema(options: MappingProxyType[str, Any]) -> dict:
             default=DEFAULT_SERVER_IP,): str,
         vol.Optional(CONF_SERVER_PORT,
             description={"suggested_value": options[CONF_SERVER_PORT]},
-            default=DEFAULT_SERVER_PORT,): str,
+            default=DEFAULT_SERVER_PORT,): int,
         vol.Optional(
             CONF_PROMPT,
             description={"suggested_value": options[CONF_PROMPT]},
