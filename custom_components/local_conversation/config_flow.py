@@ -47,39 +47,31 @@ _LOGGER = logging.getLogger(__name__)
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_SERVER_IP,
-            description={"suggested_value": options[CONF_SERVER_IP]},
             default=DEFAULT_SERVER_IP,): str,
         vol.Required(CONF_SERVER_PORT,
-            description={"suggested_value": options[CONF_SERVER_PORT]},
             default=DEFAULT_SERVER_PORT,): str,
         vol.Optional(
             CONF_PROMPT,
-            description={"suggested_value": options[CONF_PROMPT]},
             default=DEFAULT_PROMPT,
         ): TemplateSelector(),
         vol.Optional(
             CONF_MAX_TOKENS,
-            description={"suggested_value": options[CONF_MAX_TOKENS]},
             default=DEFAULT_MAX_TOKENS,
         ): int,
         vol.Optional(
             CONF_TOP_P,
-            description={"suggested_value": options[CONF_TOP_P]},
             default=DEFAULT_TOP_P,
         ): NumberSelector(NumberSelectorConfig(min=0, max=1, step=0.05)),
         vol.Optional(
             CONF_TEMPERATURE,
-            description={"suggested_value": options[CONF_TEMPERATURE]},
             default=DEFAULT_TEMPERATURE,
         ): NumberSelector(NumberSelectorConfig(min=0, max=1, step=0.05)),
         vol.Optional(
             CONF_TOP_K,
-            description={"suggested_value": options[CONF_TOP_K]},
             default=DEFAULT_TOP_K,
         ): NumberSelector(NumberSelectorConfig(min=0, max=200, step=1)),
         vol.Optional(
             CONF_NUM_BEAMS,
-            description={"suggested_value": options[CONF_NUM_BEAMS]},
             default=DEFAULT_NUM_BEAMS,
         ): NumberSelector(NumberSelectorConfig(min=1, max=5, step=1)),
     }
