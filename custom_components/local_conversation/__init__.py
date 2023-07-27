@@ -17,7 +17,7 @@ except ImportError:
     print("Websockets package not found. Make sure it's installed.")
     
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_API_KEY, MATCH_ALL
+from homeassistant.const import MATCH_ALL
 from homeassistant.core import HomeAssistant
 from homeassistant.components import conversation
 from homeassistant.components.conversation import agent
@@ -27,13 +27,18 @@ from homeassistant.util import ulid
 
 from .const import (
     CONF_CHAT_MODEL,
+    CONF_SERVER_IP,
+    CONF_SERVER_PORT,
     CONF_MAX_TOKENS,
     CONF_PROMPT,
     CONF_TEMPERATURE,
     CONF_TOP_P,
     CONF_TOP_K,
     CONF_NUM_BEAMS,
+    CONF_LOCAL_URI,
     DEFAULT_CHAT_MODEL,
+    DEFAULT_SERVER_IP,
+    DEFAULT_SERVER_PORT,
     DEFAULT_MAX_TOKENS,
     DEFAULT_PROMPT,
     DEFAULT_TEMPERATURE,
@@ -44,8 +49,8 @@ from .const import (
 )
 
 DOMAIN = "local_conversation"
-HOST = '192.168.86.79:5000'
-URI = f'http://{HOST}/api/v1/generate'
+#HOST = f'{}:{}' '192.168.86.79:5000'
+#URI = f'http://{HOST}/api/v1/generate'
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -87,6 +92,10 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         top_k = self.entry.options.get(CONF_TOP_K, DEFAULT_TOP_K)
         num_beams = self.entry.options.get(CONF_NUM_BEAMS, DEFAULT_NUM_BEAMS)
 
+        host_uri = f'{self.entry.options.get(CONF_SERVER_IP, DEFAULT_SERVER_IP)}:{self.entry.options.get(CONF_SERVER_PORT, DEFAULT_SERVER_PORT)}'
+        URI = f'http://{host_uri}/api/v1/generate'
+
+        
         if user_input.conversation_id in self.history:
             conversation_id = user_input.conversation_id
             messages = self.history[conversation_id]
