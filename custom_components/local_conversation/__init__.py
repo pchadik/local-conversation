@@ -157,7 +157,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
     
             'seed': -1,
             'add_bos_token': True,
-            'truncation_length': 8192,
+            'truncation_length': 8192, # should reduce this by/for default installs
             'ban_eos_token': False,
             'skip_special_tokens': True,
             'stopping_strings': []

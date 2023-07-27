@@ -216,6 +216,6 @@ def llm_config_option_schema(options: MappingProxyType[str, Any]) -> dict:
         vol.Optional(
             CONF_NUM_BEAMS,
             description="Number of beams in search",
-            default=CONF_NUM_BEAMS,
+            default=self.config_entry.options.get(CONF_NUM_BEAMS, DEFAULT_NUM_BEAMS),
         ): NumberSelector(NumberSelectorConfig(min=1, max=5, step=1)),
     }
