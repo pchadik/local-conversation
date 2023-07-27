@@ -46,32 +46,42 @@ _LOGGER = logging.getLogger(__name__)
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
-        vol.Optional(CONF_SERVER_IP,
-            default=DEFAULT_SERVER_IP,): str,
-        vol.Optional(CONF_SERVER_PORT,
-            default=DEFAULT_SERVER_PORT,): int,
         vol.Optional(
             CONF_PROMPT,
+            description="Prompt Template",
             default=DEFAULT_PROMPT,
         ): TemplateSelector(),
         vol.Optional(
+            CONF_SERVER_IP,
+            description="LLM Server IP Address",
+            default=DEFAULT_SERVER_IP,): str,
+        vol.Optional(
+            CONF_SERVER_PORT,
+            description="LLM Server Port",
+            default=DEFAULT_SERVER_PORT,): int,
+        vol.Optional(
             CONF_MAX_TOKENS,
+            description="Maximum tokens to return in response",
             default=DEFAULT_MAX_TOKENS,
         ): int,
         vol.Optional(
             CONF_TOP_P,
+            description="Top P",
             default=DEFAULT_TOP_P,
         ): NumberSelector(NumberSelectorConfig(min=0, max=1, step=0.05)),
         vol.Optional(
             CONF_TEMPERATURE,
+            description="Temperature",
             default=DEFAULT_TEMPERATURE,
         ): NumberSelector(NumberSelectorConfig(min=0, max=1, step=0.05)),
         vol.Optional(
             CONF_TOP_K,
+            description="Top K",
             default=DEFAULT_TOP_K,
         ): NumberSelector(NumberSelectorConfig(min=0, max=200, step=1)),
         vol.Optional(
             CONF_NUM_BEAMS,
+            description="Number of beams in search",
             default=DEFAULT_NUM_BEAMS,
         ): NumberSelector(NumberSelectorConfig(min=1, max=5, step=1)),
     }
@@ -168,38 +178,40 @@ def llm_config_option_schema(options: MappingProxyType[str, Any]) -> dict:
     return {
         vol.Optional(
             CONF_PROMPT,
-            description={"suggested_value": options[CONF_PROMPT]},
+            description="Prompt Template",
             default=DEFAULT_PROMPT,
         ): TemplateSelector(),
-        vol.Optional(CONF_SERVER_IP,
-            description={"suggested_value": options[CONF_SERVER_IP]},
+        vol.Optional(
+            CONF_SERVER_IP,
+            description="LLM Server IP Address",
             default=DEFAULT_SERVER_IP,): str,
-        vol.Optional(CONF_SERVER_PORT,
-            description={"suggested_value": options[CONF_SERVER_PORT]},
+        vol.Optional(
+            CONF_SERVER_PORT,
+            description="LLM Server Port",
             default=DEFAULT_SERVER_PORT,): int,
         vol.Optional(
             CONF_MAX_TOKENS,
-            description={"suggested_value": options[CONF_MAX_TOKENS]},
+            description="Maximum tokens to return in response",
             default=DEFAULT_MAX_TOKENS,
         ): int,
         vol.Optional(
             CONF_TOP_P,
-            description={"suggested_value": options[CONF_TOP_P]},
+            description="Top P",
             default=DEFAULT_TOP_P,
         ): NumberSelector(NumberSelectorConfig(min=0, max=1, step=0.05)),
         vol.Optional(
             CONF_TEMPERATURE,
-            description={"suggested_value": options[CONF_TEMPERATURE]},
+            description="Temperature",
             default=DEFAULT_TEMPERATURE,
         ): NumberSelector(NumberSelectorConfig(min=0, max=1, step=0.05)),
         vol.Optional(
             CONF_TOP_K,
-            description={"suggested_value": options[CONF_TOP_K]},
+            description="Top K",
             default=DEFAULT_TOP_K,
-        ): NumberSelector(NumberSelectorConfig(min=0, max=100, step=1)),
+        ): NumberSelector(NumberSelectorConfig(min=0, max=200, step=1)),
         vol.Optional(
             CONF_NUM_BEAMS,
-            description={"suggested_value": options[CONF_NUM_BEAMS]},
+            description="Number of beams in search",
             default=DEFAULT_NUM_BEAMS,
         ): NumberSelector(NumberSelectorConfig(min=1, max=5, step=1)),
     }
