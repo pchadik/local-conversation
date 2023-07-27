@@ -46,9 +46,9 @@ _LOGGER = logging.getLogger(__name__)
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_SERVER_IP,
+        vol.Optional(CONF_SERVER_IP,
             default=DEFAULT_SERVER_IP,): str,
-        vol.Required(CONF_SERVER_PORT,
+        vol.Optional(CONF_SERVER_PORT,
             default=DEFAULT_SERVER_PORT,): int,
         vol.Optional(
             CONF_PROMPT,
@@ -166,17 +166,17 @@ def llm_config_option_schema(options: MappingProxyType[str, Any]) -> dict:
     if not options:
         options = DEFAULT_OPTIONS
     return {
+        vol.Optional(
+            CONF_PROMPT,
+            description={"suggested_value": options[CONF_PROMPT]},
+            default=DEFAULT_PROMPT,
+        ): TemplateSelector(),
         vol.Optional(CONF_SERVER_IP,
             description={"suggested_value": options[CONF_SERVER_IP]},
             default=DEFAULT_SERVER_IP,): str,
         vol.Optional(CONF_SERVER_PORT,
             description={"suggested_value": options[CONF_SERVER_PORT]},
             default=DEFAULT_SERVER_PORT,): int,
-        vol.Optional(
-            CONF_PROMPT,
-            description={"suggested_value": options[CONF_PROMPT]},
-            default=DEFAULT_PROMPT,
-        ): TemplateSelector(),
         vol.Optional(
             CONF_MAX_TOKENS,
             description={"suggested_value": options[CONF_MAX_TOKENS]},

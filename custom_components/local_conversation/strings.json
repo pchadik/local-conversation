@@ -3,7 +3,14 @@
     "step": {
       "user": {
         "data": {
-          "api_key": "[%key:common::config_flow::data::api_key%]"
+          "prompt": "Prompt Template",
+          "server_ip": "LLM Server IP Address",
+          "server_port": "LLM Server Port",
+          "max_tokens": "Maximum tokens to return in response",
+          "top_p": "Top P",
+          "temperature": "Temperature",
+          "num_beams": "Number of beams in search",
+          "top_k": "Top K",
         }
       }
     },
@@ -18,10 +25,13 @@
       "init": {
         "data": {
           "prompt": "Prompt Template",
-          "model": "Completion Model",
+          "server_ip": "LLM Server IP Address",
+          "server_port": "LLM Server Port",
           "max_tokens": "Maximum tokens to return in response",
+          "top_p": "Top P",
           "temperature": "Temperature",
-          "top_p": "Top P"
+          "num_beams": "Number of beams in search",
+          "top_k": "Top K",
         }
       }
     }
