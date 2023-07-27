@@ -181,41 +181,41 @@ def llm_config_option_schema(options: MappingProxyType[str, Any]) -> dict:
         vol.Optional(
             CONF_PROMPT,
             description="Prompt Template",
-            default=CONF_PROMPT,
+            default=options.get(CONF_PROMPT, DEFAULT_PROMPT),
         ): TemplateSelector(),
         vol.Optional(
             CONF_SERVER_IP,
             description="LLM Server IP Address",
-            default=CONF_SERVER_IP,
+            default=options.get(CONF_SERVER_IP, DEFAULT_SERVER_IP),
             ): str,
         vol.Optional(
             CONF_SERVER_PORT,
             description="LLM Server Port",
-            default=CONF_SERVER_PORT,
+            default=options.get(CONF_SERVER_PORT, DEFAULT_SERVER_PORT),
             ): int,
         vol.Optional(
             CONF_MAX_TOKENS,
             description="Maximum tokens to return in response",
-            default=CONF_MAX_TOKENS,
+            default=options.get(CONF_MAX_TOKENS, DEFAULT_MAX_TOKENS),
         ): int,
         vol.Optional(
             CONF_TOP_P,
             description="Top P",
-            default=CONF_TOP_P,
+            default=options.get(CONF_TOP_P, DEFAULT_TOP_P),
         ): NumberSelector(NumberSelectorConfig(min=0, max=1, step=0.05)),
         vol.Optional(
             CONF_TEMPERATURE,
             description="Temperature",
-            default=CONF_TEMPERATURE,
+            default=options.get(CONF_TEMPERATURE, DEFAULT_TEMPERATURE),
         ): NumberSelector(NumberSelectorConfig(min=0, max=1, step=0.05)),
         vol.Optional(
             CONF_TOP_K,
             description="Top K",
-            default=CONF_TOP_K,
+            default=options.get(CONF_TOP_K, DEFAULT_TOP_K),
         ): NumberSelector(NumberSelectorConfig(min=0, max=200, step=1)),
         vol.Optional(
             CONF_NUM_BEAMS,
             description="Number of beams in search",
-            default=self.config_entry.options.get(CONF_NUM_BEAMS, DEFAULT_NUM_BEAMS),
+            default=options.get(CONF_NUM_BEAMS, DEFAULT_NUM_BEAMS),
         ): NumberSelector(NumberSelectorConfig(min=1, max=5, step=1)),
     }
