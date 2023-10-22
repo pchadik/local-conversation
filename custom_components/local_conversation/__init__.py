@@ -87,7 +87,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         filename_suffix = "_memory.txt"
         
         now = datetime.now().strftime("%Y%m%d%H%M%S")
-        filepath = f"{now}_{filename_suffix}"
+        filepath = f"{text_location}/{now}{filename_suffix}"
         
         with open(filepath, "w+") as file:
             file.write(text_memory)
@@ -206,7 +206,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         messages.append({"role": "assistant", "content": resp})
         self.history[conversation_id] = messages
 
-        await self.save_memory(resp, 'memories')
+        await self.save_memory((conversation_id + '\n\n' + messages[-2][content] + '\n\n' + resp), 'memories')
         
         intent_response = intent.IntentResponse(language=user_input.language)
         intent_response.async_set_speech(resp)
