@@ -100,9 +100,9 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             
         cumulative_memory = ""
         
-        for filename in os.listdir(f"{text_location})":
+        for filename in os.listdir(f"{text_location}"):
             if start_filename <= filename <= end_filename:
-                with open(os.path.join(text_location, subfolder, filename), "r") as file:
+                with open(os.path.join(text_location, filename), "r") as file:
                     contents = file.read()
                         
                 cumulative_memory += f"{filename}:\n\n{contents}\n\n"
