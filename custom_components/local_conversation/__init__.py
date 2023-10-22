@@ -203,7 +203,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
 
         resp = result['results'][0]['text']
 
-        save_memory((prompt_with_history + '\n\n' + resp), 'memories/chat')
+        self.save_memory(resp, 'memories/chat')
         
         messages.append({"role": "assistant", "content": resp})
         self.history[conversation_id] = messages
