@@ -83,7 +83,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             "url": "https://example.com",
         }
 
-    async def save_memory(text_memory, text_location):
+    async def save_memory(self, text_memory, text_location):
         filename_suffix = "_memory.txt"
         
         now = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -94,7 +94,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             
         return True
 
-    async def get_memory_from_timeframe(start_date, end_date, text_location):
+    async def get_memory_from_timeframe(self, start_date, end_date, text_location):
         start_filename = f"{start_date}_{filename_format}"
         end_filename = f"{end_date}_{filename_format}"
             
