@@ -206,7 +206,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         messages.append({"role": "assistant", "content": resp})
         self.history[conversation_id] = messages
 
-        await self.save_memory((conversation_id + '\n\n' + messages[-2][content] + '\n\n' + resp), 'memories')
+        await self.save_memory((conversation_id + '\n\n' + messages[-2]['content'] + '\n\n' + resp), 'memories')
         
         intent_response = intent.IntentResponse(language=user_input.language)
         intent_response.async_set_speech(resp)
