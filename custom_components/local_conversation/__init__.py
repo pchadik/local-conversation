@@ -87,7 +87,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         filename_suffix = "_memory.txt"
         
         now = datetime.now().strftime("%Y%m%d%H%M%S")
-        filepath = f"{text_location}/{now}_{filename_suffix}"
+        filepath = f"{now}_{filename_suffix}"
         
         with open(filepath, "w+") as file:
             file.write(text_memory)
@@ -203,7 +203,7 @@ class MyConversationAgent(agent.AbstractConversationAgent):
 
         resp = result['results'][0]['text']
 
-        self.save_memory(str(resp), "memories")
+        self.save_memory(resp, 'memories')
         
         messages.append({"role": "assistant", "content": resp})
         self.history[conversation_id] = messages
