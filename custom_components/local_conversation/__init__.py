@@ -83,6 +83,33 @@ class MyConversationAgent(agent.AbstractConversationAgent):
             "url": "https://example.com",
         }
 
+    async def save_memory(text_memory, text_location):
+        filename_suffix = "_memory.txt"
+        
+        now = datetime.now().strftime("%Y%m%d%H%M%S")
+        filepath = f"{text_location}/{now}_{filename_suffix}"
+        
+        with open(filepath, "w+") as file:
+            file.write(text_memory)
+            
+        return True
+
+    async def get_memory_from_timeframe(start_date, end_date, text_location):
+        start_filename = f"{start_date}_{filename_format}"
+        end_filename = f"{end_date}_{filename_format}"
+            
+        cumulative_memory = ""
+        
+        for filename in os.listdir(f"{text_location})":
+            if start_filename <= filename <= end_filename:
+                with open(os.path.join(text_location, subfolder, filename), "r") as file:
+                    contents = file.read()
+                        
+                cumulative_memory += f"{filename}:\n\n{contents}\n\n"
+                
+        return cumulative_memory
+
+    
     async def async_process(self, user_input: agent.ConversationInput) -> agent.ConversationResult:
         """Process a sentence."""
         raw_prompt = self.entry.options.get(CONF_PROMPT, DEFAULT_PROMPT)
@@ -175,6 +202,8 @@ class MyConversationAgent(agent.AbstractConversationAgent):
         result = await self.hass.async_add_executor_job(sync_post_data, URI, request)
 
         resp = result['results'][0]['text']
+
+        save_memory((prompt_with_history + '\n\n' + resp), 'memories/chat')
         
         messages.append({"role": "assistant", "content": resp})
         self.history[conversation_id] = messages
